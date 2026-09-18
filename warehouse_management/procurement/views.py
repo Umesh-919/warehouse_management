@@ -1,11 +1,15 @@
+
 from django.http import request
 from django.shortcuts import render
 
 from rest_framework import viewsets, status
+from django.db import models
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import PurchaseRequest
+from suppliers.models import Product
+
+from .models import PurchaseRequest, PurchaseRequestItem, PurchaseRequestItem
 from .serializers import PurchaseRequestSerializer
 
 
@@ -62,3 +66,53 @@ class PurchaseRequestViewSet(viewsets.ModelViewSet):
         return Response(
         PurchaseRequestSerializer(purchase_request).data
         )
+
+
+    @action(detail=False, methods=["post"])
+    def generate(self, request):
+        from suppliers.models import Product
+
+        products = Product.objects.filter(is_active=True)
+
+        low_stock_products = products.filter(
+            current_quantity__lt=models.F("reorder_level")
+        )
+
+        if not low_stock_products.exists():
+            return Response(
+                {"detail": "No products are below their reorder level."},
+                status=status.HTTP_200_OK
+            )
+
+        # Generate next PR ID
+        last_pr = PurchaseRequest.objects.order_by("-id").first()
+
+        if last_pr:
+            last_number = int(last_pr.purchase_id.split("-")[1])
+            next_number = last_number + 1
+        else:
+            next_number = 1
+
+        purchase_id = f"PR-{next_number:03d}"
+
+        # Create Purchase Request
+        purchase_request = PurchaseRequest.objects.create(
+            purchase_id=purchase_id
+        )
+
+        # Create Purchase Request Items
+        for product in low_stock_products:
+            suggested_quantity = (
+                product.reorder_level - product.current_quantity
+            )
+
+            PurchaseRequestItem.objects.create(
+            purchase_request=purchase_request,
+            product=product,
+            quantity=suggested_quantity
+        )
+
+        return Response(
+            PurchaseRequestSerializer(purchase_request).data,
+            status=status.HTTP_201_CREATED
+    )

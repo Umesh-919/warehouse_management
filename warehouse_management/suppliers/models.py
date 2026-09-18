@@ -56,11 +56,6 @@ class SupplierProduct(models.Model):
 
 
 
-
-
-
-
-
 class Product(models.Model):
     product_code = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=150)
@@ -69,7 +64,6 @@ class Product(models.Model):
 
     current_quantity = models.PositiveIntegerField(default=0)
     reorder_level = models.PositiveIntegerField(default=0)
-
 
 
     is_active = models.BooleanField(default=True)

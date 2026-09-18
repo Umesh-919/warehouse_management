@@ -5,6 +5,7 @@ from django.db import models
 
 class PurchaseRequest(models.Model):
     STATUS_CHOICES = [
+        ("DRAFT", "Draft"),
         ("PENDING_APPROVAL", "Pending Approval"),
         ("APPROVED", "Approved"),
         ("REJECTED", "Rejected"),
@@ -15,7 +16,7 @@ class PurchaseRequest(models.Model):
     status = models.CharField(
         max_length=30,
         choices=STATUS_CHOICES,
-        default="PENDING_APPROVAL"
+        default="DRAFT"
     )
 
     rejection_reason = models.TextField(blank=True)
