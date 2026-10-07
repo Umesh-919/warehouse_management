@@ -9,9 +9,35 @@ class SupplierSerializer(serializers.ModelSerializer):
 
 
 class SupplierProductSerializer(serializers.ModelSerializer):
+    supplier_name = serializers.CharField(
+        source="supplier.supplier_name",
+        read_only=True
+    )
+
+    product_name = serializers.CharField(
+        source="product.name",
+        read_only=True
+    )
+
+    product_code = serializers.CharField(
+        source="product.product_code",
+        read_only=True
+    )
+
     class Meta:
         model = SupplierProduct
-        fields = "__all__"
+        fields = [
+            "id",
+            "supplier",
+            "supplier_name",
+            "product",
+            "product_name",
+            "product_code",
+            "description",
+            "purchase_price",
+            "lead_time_days",
+            "is_active",
+        ]
 
 
 
