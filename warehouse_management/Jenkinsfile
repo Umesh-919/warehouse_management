@@ -1,19 +1,25 @@
 
+
 pipeline {
     agent any
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
                 echo 'GitHub code downloaded successfully'
             }
         }
 
-        stage('Django Check') {
+        stage('Check Environment') {
             steps {
-                echo 'Jenkins pipeline is working'
+                bat 'where python'
+                bat 'python --version'
+                bat 'where pip'
+                bat 'pip --version'
+                bat 'where docker'
+                bat 'docker --version'
             }
         }
     }
 }
+
