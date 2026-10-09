@@ -20,6 +20,12 @@ pipeline {
                 bat 'docker --version'
             }
         }
+
+         stage('Docker Engine Check') {
+            steps {
+                bat 'docker info'
+            }
+        }
     }
 }
 
