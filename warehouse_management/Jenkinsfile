@@ -62,6 +62,34 @@ pipeline {
         }
 
 
+        
+        stage('Deploy Application') {
+            steps {
+                withCredentials([file(
+                    credentialsId: 'warehouse-env-file',
+                    variable: 'ENV_FILE'
+                )]) {
+                    dir('warehouse_management') {
+                        script {
+                            try {
+                                bat 'copy /Y "%ENV_FILE%" ".env"'
+
+                                bat 'docker-compose up -d --build'
+
+                                bat 'docker-compose run --rm web python manage.py migrate'
+
+                                bat 'docker-compose ps'
+                            } finally {
+                                bat 'if exist .env del /f /q .env'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
     }
 }
 
