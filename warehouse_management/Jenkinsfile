@@ -44,6 +44,16 @@ pipeline {
             }
         }
 
+        
+        stage('Django Tests') {
+            steps {
+                dir('warehouse_management') {
+                    bat 'python manage.py test suppliers'
+                }
+            }
+        }
+
+
     }
 }
 
