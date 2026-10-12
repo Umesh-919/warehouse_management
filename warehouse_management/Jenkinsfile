@@ -46,15 +46,15 @@ pipeline {
 
         
         
-stage('Django Tests') {
-    steps {
-        dir('warehouse_management') {
-            bat 'docker run --rm warehouse-management:ci python manage.py test suppliers'
+        stage('Django Tests') {
+            steps {
+                dir('warehouse_management') {
+                    bat 'docker compose run --rm web python manage.py test suppliers'
+                }
+            }
         }
-    }
-}
 
-        }
+
 
 
     }
