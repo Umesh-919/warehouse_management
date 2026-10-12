@@ -34,6 +34,16 @@ pipeline {
                 }
             }
         }
+
+        
+        stage('Django System Check') {
+            steps {
+                dir('warehouse_management') {
+                    bat 'python manage.py check'
+                }
+            }
+        }
+
     }
 }
 
