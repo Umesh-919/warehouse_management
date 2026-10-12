@@ -47,10 +47,21 @@ pipeline {
 
         
         
+        
         stage('Django Tests') {
             steps {
-                dir('warehouse_management') {
-                    bat 'docker-compose run --rm web python manage.py test suppliers'
+                withCredentials([file(
+                    credentialsId: 'warehouse-env-file',
+                    variable: 'ENV_FILE'
+                )]) {
+                    dir('warehouse_management') {
+                        bat 'copy /Y "%ENV_FILE%" ".env"'
+                        try {
+                            bat 'docker-compose run --rm web python manage.py test suppliers'
+                        } finally {
+                            bat 'if exist .env del /f /q .env'
+                        }
+                    }
                 }
             }
         }
