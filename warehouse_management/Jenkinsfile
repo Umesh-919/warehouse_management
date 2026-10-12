@@ -50,11 +50,10 @@ pipeline {
         stage('Django Tests') {
             steps {
                 dir('warehouse_management') {
-                    bat 'docker compose run --rm web python manage.py test suppliers'
+                    bat 'docker-compose run --rm web python manage.py test suppliers'
                 }
             }
         }
-
 
 
 
