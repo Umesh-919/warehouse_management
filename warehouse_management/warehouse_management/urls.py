@@ -16,12 +16,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
+
+
+def home(request):
+    return JsonResponse({
+        "message": "Smart Warehouse Management System API is running",
+        "status": "success"
+    })
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include("suppliers.urls")),
     path("api/", include("procurement.urls")),
+    path("", home, name="home"),
 
 ]
+
+
+
+
 
 
