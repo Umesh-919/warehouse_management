@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-#u-+-ups6ww8!w98v189!q*dl$45469vn8uo7hs^ny!tum52k@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["10.107.11.190", "localhost", "127.0.0.1"]
+
+ALLOWED_HOSTS = [
+    "warehouse-management-seja.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+
 
 
 # Application definition
