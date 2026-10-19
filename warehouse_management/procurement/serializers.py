@@ -94,7 +94,7 @@ class RejectPurchaseRequestSerializer(serializers.Serializer):
         required=True,
         allow_blank=False,
         trim_whitespace=True
-    
+    )
 
 
     
