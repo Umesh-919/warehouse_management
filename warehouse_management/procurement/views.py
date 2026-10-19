@@ -67,35 +67,36 @@ class PurchaseRequestViewSet(viewsets.ModelViewSet):
     )
     
 
-    @action(detail=True, methods=["post"])
+    
+    @action(
+        detail=True,
+        methods=["post"],
+        serializer_class=RejectPurchaseRequestSerializer
+    )
     def reject(self, request, pk=None):
         purchase_request = self.get_object()
 
         if purchase_request.status != "PENDING_APPROVAL":
             return Response(
-              {
-                  "detail": "Only pending purchase requests can be rejected."
-             },
-             status=status.HTTP_400_BAD_REQUEST
+                {
+                    "detail": "Only pending purchase requests can be rejected."
+                },
+                status=status.HTTP_400_BAD_REQUEST
             )
 
-        reason = request.data.get("rejection_reason")
-
-        if not reason:
-            return Response(
-            {
-                    "detail": "Rejection reason is required."
-            },
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        serializer = RejectPurchaseRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         purchase_request.status = "REJECTED"
-        purchase_request.rejection_reason = reason
+        purchase_request.rejection_reason = (
+            serializer.validated_data["rejection_reason"]
+        )
         purchase_request.save()
 
         return Response(
-        PurchaseRequestSerializer(purchase_request).data
+            PurchaseRequestSerializer(purchase_request).data
         )
+
 
 
     @action(detail=False, methods=["post"])
