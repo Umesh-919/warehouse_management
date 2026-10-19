@@ -89,6 +89,14 @@ class PurchaseRequestSerializer(serializers.ModelSerializer):
 
         return data
 
+class RejectPurchaseRequestSerializer(serializers.Serializer):
+    rejection_reason = serializers.CharField(
+        required=True,
+        allow_blank=False,
+        trim_whitespace=True
+    
+
+
     
 
 class PurchaseOrderItemSerializer(serializers.ModelSerializer):

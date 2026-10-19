@@ -14,7 +14,7 @@ from .supplier_selection import create_purchase_order
 from suppliers.models import Product
 
 from .models import PurchaseRequest, PurchaseRequestItem, PurchaseOrder, PurchaseOrderItem
-from .serializers import PurchaseRequestSerializer, PurchaseOrderSerializer
+from .serializers import PurchaseRequestSerializer,RejectPurchaseRequestSerializer, PurchaseOrderSerializer
 
 
 class PurchaseRequestViewSet(viewsets.ModelViewSet):
